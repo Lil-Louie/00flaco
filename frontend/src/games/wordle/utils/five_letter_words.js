@@ -1,0 +1,24 @@
+const dict_words = [
+  "APPLE", "BRAIN", "CRISP", "DREAM", "EAGER",
+  "FLAME", "GRAPE", "HOUSE", "INDEX", "JUICE",
+  "KNIFE", "LEMON", "MANGO", "NERVE", "OCEAN",
+  "PEARL", "QUICK", "ROAST", "STONE", "TRAIN",
+  "ULTRA", "VIVID", "WATER", "XENON", "YEAST",
+  "ZEBRA", "ANGEL", "BERRY", "CLOUD", "DELTA",
+  "EARTH", "FAITH", "GIANT", "HONEY", "IVORY",
+  "JOLLY", "KOALA", "LIGHT", "MUSIC", "NORTH",
+  "OPERA", "PIZZA", "QUEEN", "RIVER", "SUGAR",
+  "TIGER", "UNION", "VALOR", "WORLD", "YOUTH",
+  "ALERT", "BLEND", "CHAIR", "DRINK", "EVERY",
+  "FRUIT", "GLASS", "HEART", "IDEAL", "JELLY",
+  "KINGS", "LUNCH", "MARCH", "NOBLE", "OASIS",
+  "PLANT", "QUIET", "RANCH", "SHINE", "TREND",
+  "UNITY", "VITAL", "WORTH", "YOUNG", "ZONED",
+  "AMBER", "BEACH", "CLEAN", "DAIRY", "ENJOY",
+  "FAIRY", "GUEST", "HAPPY", "INNER", "JUICY",
+  "KNOCK", "LEVEL", "MAGIC", "NIGHT", "OCTAL",
+  "PAINT", "QUILT", "REACH", "SMILE", "TABLE",
+  "UNDER", "VOICE", "WHEAT", "XENIA", "ZESTY"
+];
+
+export default dict_words;

@@ -1,16 +1,20 @@
-import Intro from './components/Intro';
-import HomePage from './pages/HomePage';
-import background from './assets/background.jpg'
-
+import Layout from './components/Layout';
+import Home from './pages/Home';
+import Games from './pages/Games';
+import Snake from './games/snake/snake';   // example
+import Wordle from './games/wordle/Wordle';     // when you have it
+import { Routes, Route } from 'react-router-dom';
 
 function App() {
   return (
-      <div className="App bg-cover bg-center bg-no-repeat min-h-screen"
-           style={{ backgroundImage: `url(${background})` }}
-      >
-        <Intro/>
-        <HomePage/>
-      </div>
+    <Layout>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/games" element={<Games />} />
+        <Route path="/games/snake" element={<Snake />} />
+        <Route path="/games/wordle" element={<Wordle />} />
+      </Routes>
+    </Layout>
   );
 }
 
