@@ -1,20 +1,20 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Box } from "@mui/material";
-import dimensions from "../utils/dimensions";
 import boxStyleVariants from "../utils/boxesAndTheirAttributes";
 
-const BoardCell = React.memo(function BoardCell({ variant }) {
+const GAP = 2;
+
+const BoardCell = React.memo(function BoardCell({ size, variant }) {
   const style = boxStyleVariants[variant] || boxStyleVariants.freeArea;
 
   return (
     <Box
       sx={{
-        width: dimensions.widthOfCell,
-        height: dimensions.heightOfCell,
+        width: size,
+        height: size,
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        fontSize: "0.9rem",
         ...style,
       }}
     />
@@ -22,53 +22,56 @@ const BoardCell = React.memo(function BoardCell({ variant }) {
 });
 
 const GameBoard = ({ board }) => {
+  const wrapRef = useRef(null);
+  const [wrapW, setWrapW] = useState(484);
+
   const rows = board.length;
   const cols = board[0].length;
 
-  // Your "natural" pixel size
-  const naturalW = cols * dimensions.widthOfCell + (cols - 1) * 2; // gap=2
-  const naturalH = rows * dimensions.heightOfCell + (rows - 1) * 2;
+  useEffect(() => {
+    if (!wrapRef.current) return;
 
-  // Scale to fit viewport (mobile), but never scale up beyond 1
-  const scale = useMemo(() => {
-    // leave a little padding for borders/margins
-    const maxW = window.innerWidth - 24;
-    const maxH = window.innerHeight - 220; // header + score + button space
-    return Math.min(1, maxW / naturalW, maxH / naturalH);
-  }, [naturalW, naturalH]);
+    const ro = new ResizeObserver(([entry]) => {
+      setWrapW(entry.contentRect.width);
+    });
+
+    ro.observe(wrapRef.current);
+    return () => ro.disconnect();
+  }, []);
+
+  // ✅ Width-only sizing: stable vs mobile address bar height changes
+  const cellSize = useMemo(() => {
+    const totalGaps = (cols - 1) * GAP;
+    const maxCell = Math.floor((wrapW - totalGaps) / cols);
+
+    // cap so desktop still uses your preferred large size (adjust 24/28/etc)
+    return Math.min(maxCell, 24); // <-- pick your "desktop" cell size cap
+  }, [wrapW, cols]);
 
   return (
-    <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", p: 1 }}>
+    <Box ref={wrapRef} sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
       <Box
         sx={{
-          width: naturalW,
-          height: naturalH,
-          transform: `scale(${scale})`,
-          transformOrigin: "top center",
+          display: "grid",
+          gridTemplateColumns: `repeat(${cols}, ${cellSize}px)`,
+          gridTemplateRows: `repeat(${rows}, ${cellSize}px)`,
+          gap: `${GAP}px`,
         }}
       >
-        <Box
-          sx={{
-            display: "grid",
-            gridTemplateColumns: `repeat(${cols}, ${dimensions.widthOfCell}px)`,
-            gridTemplateRows: `repeat(${rows}, ${dimensions.heightOfCell}px)`,
-            gap: "2px",
-          }}
-        >
-          {board.map((row, r) =>
-            row.map((cell, c) => (
-              <BoardCell
-                key={`${r}-${c}`}
-                variant={
-                  cell === -1 ? "wall" :
-                  cell === -2 ? "snake" :
-                  cell === -3 ? "food" :
-                  "freeArea"
-                }
-              />
-            ))
-          )}
-        </Box>
+        {board.map((row, r) =>
+          row.map((cell, c) => (
+            <BoardCell
+              key={`${r}-${c}`}
+              size={cellSize}
+              variant={
+                cell === -1 ? "wall" :
+                cell === -2 ? "snake" :
+                cell === -3 ? "food" :
+                "freeArea"
+              }
+            />
+          ))
+        )}
       </Box>
     </Box>
   );
