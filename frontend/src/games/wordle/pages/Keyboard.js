@@ -49,7 +49,7 @@ const Keyboard = ({ keyboard, onClickCallback }) => {
               style={{ display: "flex", justifyContent: "center", gap: `${GAP}px` }}
             >
               {row.map((keyAttributes, idx) => {
-                const { letter, isEnterKey, isBackspaceKey, ...styleAttrs } = keyAttributes;
+                const { letter, isEnterKey, isBackspaceKey, width: _ignoreWidth, ...styleAttrs } = keyAttributes;
                 const isFunc = isEnterKey || isBackspaceKey;
                 const width = isFunc ? Math.round(unitWidth * FUNC_KEY_MULT) : unitWidth;
 
@@ -70,6 +70,7 @@ const Keyboard = ({ keyboard, onClickCallback }) => {
                       style={{
                         width,
                         height: KEY_HEIGHT,
+                        boxSizing: "border-box",
                         borderWidth: 1,
                         borderStyle: "solid",
                         display: "flex",

@@ -28,20 +28,17 @@ function Wordle() {
     return demoKeys.map((row, rowIdx) => {
       let mappedRow = row.map((letter) => ({
         ...boxStyles.keyboardUnusedKey,
-        width: keyboardBoxSizes.width,
         letter,
       }));
-
+  
       if (rowIdx === 2) {
         mappedRow.unshift({
           ...boxStyles.keyboardEnterKey,
-          width: keyboardFunctionSizes.width,
           letter: "Enter",
           isEnterKey: true,
         });
         mappedRow.push({
           ...boxStyles.keyboardDeleteKey,
-          width: keyboardFunctionSizes.width,
           letter: "Delete",
           isBackspaceKey: true,
         });
@@ -183,7 +180,7 @@ function Wordle() {
           alignItems: "center",
           mx: "auto",
           my: 0,
-          gap: 0.5,
+          gap: 0,
           overflowX: "hidden",
           px: 1,                    // small padding so it doesn't touch edges
         }}
