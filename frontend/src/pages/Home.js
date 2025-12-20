@@ -16,7 +16,6 @@ function Home() {
           - becomes sticky + sized only on lg+ */}
       <aside
         className="
-          w-full
           flex flex-col
           text-sm
           lg:w-[40%]
