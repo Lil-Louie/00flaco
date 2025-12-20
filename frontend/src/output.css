@@ -57,6 +57,9 @@
 .flex-1 {
   flex: 1;
 }
+.shrink {
+  flex-shrink: 1;
+}
 .cursor-pointer {
   cursor: pointer;
 }

@@ -1,78 +1,71 @@
-import {Fragment} from "react";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-
+import React from "react";
 import dimensions from "../utils/dimensions";
-const GuessBox = ({ cellContent }) => {
-    const { backgroundColor, color, borderColor, letter } = cellContent;
-  
-    return (
-      <Box
-        sx={{
-          width: dimensions.guessArea.widthOfLetterBox,
-          height: dimensions.guessArea.heightOfLetterBox,
-          backgroundColor,
-          color,                 // ✅ show letters
-          border: "2px solid",   // ✅ visible outline
-          borderColor,
-  
-          display: "flex",       // ✅ center the letter
-          alignItems: "center",
+
+const GuessBox = React.memo(function GuessBox({ cellContent }) {
+  const { backgroundColor, color, borderColor, letter } = cellContent;
+
+  return (
+    <div
+      style={{
+        width: dimensions.guessArea.widthOfLetterBox,
+        height: dimensions.guessArea.heightOfLetterBox,
+        backgroundColor,
+        color,
+        border: "2px solid",
+        borderColor,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        fontWeight: 700,
+        textTransform: "uppercase",
+        userSelect: "none",
+        // optional: helps avoid repaint blur/jank on mobile
+        WebkitTapHighlightColor: "transparent",
+      }}
+    >
+      {letter ?? ""}
+    </div>
+  );
+}, (prev, next) => {
+  // only rerender if what the tile *shows* changed
+  return (
+    prev.cellContent.letter === next.cellContent.letter &&
+    prev.cellContent.backgroundColor === next.cellContent.backgroundColor &&
+    prev.cellContent.borderColor === next.cellContent.borderColor &&
+    prev.cellContent.color === next.cellContent.color
+  );
+});
+
+const GuessArea = React.memo(function GuessArea({ allRows }) {
+  const { numColumns, hGap, vGap, widthOfLetterBox } = dimensions.guessArea;
+
+  return (
+    <div
+      style={{
+        height: dimensions.guessAreaHeight,
+        width: "100%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <div
+        style={{
+          width: dimensions.guessAreaWidth, // exactly matches your calc
+          display: "grid",
+          gridTemplateColumns: `repeat(${numColumns}, ${widthOfLetterBox}px)`,
+          columnGap: `${hGap}px`,
+          rowGap: `${vGap}px`,
           justifyContent: "center",
-          fontWeight: 700,
-          textTransform: "uppercase",
-          userSelect: "none",
-  
-          m: 0.4,
-          p: 0,
+          alignContent: "center",
         }}
       >
-        {letter ?? ""}
-      </Box>
-    );
-  };
-
-  
-  
-const GuessArea = (props) => {
-
-    const allRows = props.allRows;
-
-    return (
-        <Fragment>
-
-            <Box sx={{
-                height: dimensions.guessAreaHeight,
-                width: "100%",    // sets the stage for centering the grid in the container of this component
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-            }}>
-            <Grid container columns={dimensions.guessArea.numColumns}
-                  sx={{
-                      height: dimensions.guessAreaHeight,
-                      width: dimensions.guessAreaWidth,
-                  }}
-            >
-                {
-                    allRows.map((boxAttributes, idx) =>
-                        <Grid item xs={1}
-                              key={idx}
-                              sx={{margin: 0,
-                                      padding: 0
-                                  }}
-                        >
-                            <GuessBox cellContent={boxAttributes} />
-                            
-                        </Grid>
-                    )
-
-                }
-            </Grid>
-            </Box>
-        </Fragment>
-    )
-};
+        {allRows.map((cell, idx) => (
+          <GuessBox key={cell.id ?? idx} cellContent={cell} />
+        ))}
+      </div>
+    </div>
+  );
+});
 
 export default GuessArea;
