@@ -20,6 +20,9 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "tw:watch": "tailwindcss -i ./src/input.css -o ./src/output.css --watch",
+    "tw:build": "tailwindcss -i ./src/input.css -o ./src/output.css --minify",
+    "start:react": "react-scripts start",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
