@@ -34,8 +34,6 @@ const keyboardRowsHGap = 0;
 
 
 const dimensions = {
-    width: 600,
-    height: topBannerHeight + messageCenterHeight + guessAreaHeight + keyboardHeight,
 
     topBannerHeight: topBannerHeight,
     

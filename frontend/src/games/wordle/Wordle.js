@@ -65,10 +65,14 @@ function Wordle() {
   const [keyboard] = useState(initialKeyBoard);
 
   const [remainingRows, setRemainingRows] = useState(() =>
-    new Array(
-      dimensions.guessArea.numColumns * dimensions.guessArea.numRows -
-        dimensions.guessArea.numColumns
-    ).fill({ ...boxStyles.blankBox, letter: "" })
+    Array.from(
+      {
+        length:
+          dimensions.guessArea.numColumns * dimensions.guessArea.numRows -
+          dimensions.guessArea.numColumns,
+      },
+      () => ({ ...boxStyles.blankBox, letter: "" })
+    )
   );
 
   const [won, setWon] = useState(false);
@@ -171,16 +175,20 @@ function Wordle() {
     <Fragment>
       <Box
         sx={{
-          width: dimensions.width,
-          height: dimensions.height,
+          width: "100%",
+          maxWidth: 600,
+          minHeight: "100dvh",      // better than 100vh on mobile
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
           mx: "auto",
           my: 0,
           gap: 0.5,
+          overflowX: "hidden",
+          px: 1,                    // small padding so it doesn't touch edges
         }}
       >
+
         <Header title={"Wordle"} />
         <GuessArea allRows={allRows} />
         <MessageCenter message={message} />

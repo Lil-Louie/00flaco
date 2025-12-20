@@ -15,8 +15,10 @@ const MessageCenter = props => {
             justifyContent: "center",
             alignItems: "center"
         }}>
-            <Typography variant="h4">
-                 {message}
+            <Typography
+            sx={{ fontSize: { xs: "1.25rem", sm: "2rem" }, whiteSpace: "nowrap" }}
+            >
+            {message}
             </Typography>
         </Box>
     )

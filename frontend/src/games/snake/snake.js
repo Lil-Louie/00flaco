@@ -4,6 +4,8 @@ import GameBoard from './pages/GameBoard';
 import PlayButton from './pages/PlayButton';
 import { sizes } from './utils/dimensions';
 import { Box } from '@mui/material';
+import { useCallback } from "react";
+
 
 function Snake() {
 
@@ -133,11 +135,11 @@ function addToFreePool( temp, cell) {
     return !(next.dr === -dir.current.dr && next.dc === -dir.current.dc);
   }
 
-  function onKeyDown(e) {
+  const onKeyDown = useCallback((e) => {
     const next = mapKeyToVector(e.key);
     if (!next) return;
     if (legalTurn(next)) dir.current = next;
-  }
+  }, []); // uses refs, so safe
 
   function mapKeyToVector(key) {
     switch (key) {
@@ -162,74 +164,117 @@ function addToFreePool( temp, cell) {
     }
   }
 
+
   useEffect(() => {
-    window.addEventListener('keydown', onKeyDown);
-    return () => window.removeEventListener('keydown', onKeyDown);
+    const handler = (e) => {
+      const key = e.key;
+      const isMoveKey =
+        key === "ArrowUp" || key === "ArrowDown" || key === "ArrowLeft" || key === "ArrowRight" ||
+        key === "w" || key === "a" || key === "s" || key === "d" ||
+        key === "W" || key === "A" || key === "S" || key === "D";
+  
+      if (isMoveKey) e.preventDefault();
+  
+      onKeyDown(e);
+    };
+  
+    window.addEventListener("keydown", handler, { passive: false });
+    return () => window.removeEventListener("keydown", handler);
   }, [onKeyDown]);
-
+  
 
   useEffect(() => {
-    if (status !== 'running') return;
-
-    const TICK_MS = computeTickLength(score);
-    const timer = setInterval(() => {
-      const now = performance.now();
-      if (now - lastMoveAt.current >= TICK_MS) {
-        step()
+    if (status !== "running") return;
+  
+    let rafId;
+  
+    const loop = (t) => {
+      const tickMs = computeTickLength(score);
+      if (t - lastMoveAt.current >= tickMs) {
+        step();
+        lastMoveAt.current = t;
       }
-    }, 16)
-
-    return () => clearInterval(timer);
-  }, [status, score]);
+      rafId = requestAnimationFrame(loop);
+    };
+  
+    rafId = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(rafId);
+  }, [status, score]); // score affects speed
 
   
+  const cloneRow = (board, r) => board[r].slice();
 
   
   function step() {
-    setBoard(prevBoard => {
-      let temp = prevBoard.map(row => [...row]);
-
+    setBoard((prevBoard) => {
       const oldHead = snake.current[head.current];
-
       if (!oldHead) return prevBoard;
-      const newHeadCell = { row: oldHead.row + dir.current.dr, col: oldHead.col + dir.current.dc };
-      const newHeadValue = temp[newHeadCell.row][newHeadCell.col];
-
-      //check if game over
+  
+      const newHeadCell = {
+        row: oldHead.row + dir.current.dr,
+        col: oldHead.col + dir.current.dc,
+      };
+  
+      const newHeadValue = prevBoard[newHeadCell.row]?.[newHeadCell.col];
+  
+      // game over
       if (newHeadValue === undefined || newHeadValue === -1 || newHeadValue === -2) {
-        setStatus('gameover');
+        setStatus("gameover");
         return prevBoard;
       }
-      // If not game over, then continue the game
+  
+      // shallow copy outer array
+      let temp = prevBoard.slice();
+  
+      // clone the new head row (we will mutate it via removeFromFreePool)
+      temp[newHeadCell.row] = cloneRow(prevBoard, newHeadCell.row);
+  
+      // advance head buffer
       head.current = (head.current + 1) % snake.current.length;
       snake.current[head.current] = newHeadCell;
-
-      //If the snake ate food then 
+  
       if (newHeadValue === -3) {
+        // eating: easiest safe path is full copy only on eat
+        // (because placeFood can touch any row)
+        temp = prevBoard.map((r) => r.slice());
         temp = handleFood(temp);
+        return temp;
       } else {
+        // we will also mutate the tail cell row (addToFreePool)
+        const tailCell = snake.current[tail.current];
+        temp[tailCell.row] = temp[tailCell.row] ?? cloneRow(prevBoard, tailCell.row);
+  
+        // mutate temp using your existing helpers
         temp = removeFromFreePool(temp, newHeadValue, -2);
-        temp = addToFreePool(temp, snake.current[tail.current]);
+        temp = addToFreePool(temp, tailCell);
+  
         tail.current = (tail.current + 1) % snake.current.length;
+        return temp;
       }
-      console.log(temp)
-      return temp;
     });
-    lastMoveAt.current = performance.now();
   }
+  
+  
 
   return (
     <Fragment>
       <Box
         sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'flex-start',
+          width: "100%",
+          maxWidth: 600,
+          minHeight: "100dvh",
+          mx: "auto",
+          px: 1,
+          overflowX: "hidden",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "flex-start",
           gap: 1,
           mt: 1,
         }}
       >
+
         <Header 
           title={
             status === 'gameover'
@@ -240,11 +285,15 @@ function addToFreePool( temp, cell) {
 
         <Box
           sx={{
-            backgroundColor: 'blue',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            border: '2px solid black',
+            width: "min(100%, 484px)",   // or whatever target you want
+            aspectRatio: "1 / 1",        // keeps it square if your board is square-ish
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            border: "2px solid black",
+            overflow: "hidden",
+            bgcolor: 'blue',
+            touchAction: "none",         // stops page scrolling while swiping/tapping board
           }}
         >
           <GameBoard board={board} freePool={freePool} snake={snake} />

@@ -8,14 +8,14 @@ const Header = (props) => {
     return (
         <Fragment>
             <Box
-            sx={{flexGrow: 1,
+            sx={{flexGrow: 0.5,
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'center',
                     alignItems: 'center',
                 }}
             >
-                <Typography variant='h3' className='p-5 pb-0'>
+                <Typography variant='h3' className='p-0'>
                     {title}
                 </Typography>
             </Box>

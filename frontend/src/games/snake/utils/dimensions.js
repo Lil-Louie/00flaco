@@ -18,8 +18,6 @@ export const sizes = {
 const dimensions = {
   widthOfCell: 25,
   heightOfCell: 25,
-  boardWidth: 400,
-  boardHeight: 350,
   width: 100,
   height: 50,
 };
