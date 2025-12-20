@@ -114,7 +114,7 @@ function Home() {
           space-y-25
           lg:pt-25
           lg:pr-35
-          overflow-visible lg:overflow-y-auto
+          overflow-visible
           text-slate-300
           leading-relaxed
         "

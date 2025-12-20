@@ -8,6 +8,7 @@ const Keyboard = ({ keyboard, onClickCallback }) => {
   const wrapRef = useRef(null);
   const [wrapW, setWrapW] = useState(484);
 
+
   useEffect(() => {
     if (!wrapRef.current) return;
 
@@ -80,6 +81,12 @@ const Keyboard = ({ keyboard, onClickCallback }) => {
                         textTransform: "uppercase",
                         userSelect: "none",
                         WebkitTapHighlightColor: "transparent",
+
+                                                // ✅ font size: smaller for Enter/Delete on small screens
+                        fontSize: isFunc
+                        ? (wrapW < 420 ? 10 : 12)   // tweak numbers
+                        : (wrapW < 420 ? 12 : 14),
+
                         ...styleAttrs,
                       }}
                     >
