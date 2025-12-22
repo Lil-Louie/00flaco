@@ -209,6 +209,7 @@ function Home() {
             </Link>
           </div>
         </section>
+        <div className=""/>
       </main>
     </div>
   );
