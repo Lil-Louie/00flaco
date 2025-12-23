@@ -29,8 +29,8 @@ const Keyboard = ({ keyboard, onClickCallback }) => {
           margin: "0 auto",
           display: "flex",
           flexDirection: "column",
-          justifyContent: "center",
           gap: `${GAP}px`,
+          // ✅ remove justifyContent: "center"
         }}
       >
         {keyboard.map((row, rowIdx) => {
