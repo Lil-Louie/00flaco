@@ -9,12 +9,6 @@ import { useCallback } from "react";
 
 function Snake() {
 
-  const GameStatus = {
-    READY: 'ready',
-    RUNNING: 'running',
-    PAUSED: 'paused',
-    GAMEOVER: 'gameover',
-  };
   
   const snake = useRef(new Array(sizes.boardSize)); // holds (r,c)
   const head = useRef(0);
@@ -23,7 +17,16 @@ function Snake() {
   const dir = useRef({ dr: 0, dc: 1 }); // current unit vector
   const lastMoveAt = useRef(performance.now());
   const [board, setBoard] = useState(() => initBoard(sizes.rows, sizes.columns));
+  const touchStart = useRef({ x: 0, y: 0 });
+  const touchLocked = useRef(false);
+  const SWIPE_MIN = 18; // px threshold (tweak)
 
+  const GameStatus = {
+    READY: 'ready',
+    RUNNING: 'running',
+    PAUSED: 'paused',
+    GAMEOVER: 'gameover',
+  };
 
   //Makes a new board with index 0 to board.length
   function initBoard(rows, cols) {
@@ -134,6 +137,42 @@ function addToFreePool( temp, cell) {
   function legalTurn(next) {
     return !(next.dr === -dir.current.dr && next.dc === -dir.current.dc);
   }
+
+  function setDir(next) {
+    if (status !== "running") return;
+    if (legalTurn(next)) dir.current = next;
+  }
+
+  const onTouchStart = (e) => {
+    const t = e.touches[0];
+    touchStart.current = { x: t.clientX, y: t.clientY };
+    touchLocked.current = false;
+  };
+  
+  const onTouchMove = (e) => {
+    // prevent the page from scrolling while swiping the board
+    e.preventDefault();
+  
+    if (touchLocked.current) return;
+  
+    const t = e.touches[0];
+    const dx = t.clientX - touchStart.current.x;
+    const dy = t.clientY - touchStart.current.y;
+  
+    if (Math.abs(dx) < SWIPE_MIN && Math.abs(dy) < SWIPE_MIN) return;
+  
+    // lock to the first detected direction (prevents diagonal spam)
+    touchLocked.current = true;
+  
+    if (Math.abs(dx) > Math.abs(dy)) {
+      // left/right
+      setDir(dx > 0 ? { dr: 0, dc: 1 } : { dr: 0, dc: -1 });
+    } else {
+      // up/down
+      setDir(dy > 0 ? { dr: 1, dc: 0 } : { dr: -1, dc: 0 });
+    }
+  };
+  
 
   const onKeyDown = useCallback((e) => {
     const next = mapKeyToVector(e.key);
@@ -284,21 +323,25 @@ function addToFreePool( temp, cell) {
         />
 
         <Box
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
           sx={{
-            width: "min(100%, 484px)",   // or whatever target you want
-            aspectRatio: "1 / 1",        // keeps it square if your board is square-ish
+            width: "min(100%, 484px)",
+            aspectRatio: "1 / 1",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             border: "2px solid black",
             overflow: "hidden",
-            bgcolor: 'blue',
-            touchAction: "none",         // stops page scrolling while swiping/tapping board
+            bgcolor: "blue",
+
+            // IMPORTANT for iOS Safari: allow preventDefault() on touchmove
+            touchAction: "none",
           }}
         >
           <GameBoard board={board} freePool={freePool} snake={snake} />
-
         </Box>
+
         {(status === 'ready' || status === 'gameover') && (
           <PlayButton title='Play Snake' onClick={startGame} />
           
