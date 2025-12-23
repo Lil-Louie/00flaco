@@ -169,33 +169,30 @@ function Wordle() {
   
 
   return (
-    <Fragment>
-      <Box
-        sx={{
-          width: "100%",
-          maxWidth: 600,
-          minHeight: "100dvh",      // better than 100vh on mobile
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          mx: "auto",
-          my: 0,
-          gap: 0,
-          overflowX: "hidden",
-          px: 1,                    // small padding so it doesn't touch edges
-        }}
-      >
+      <div className="mx-auto w-full max-w-[600px] h-[100dvh] flex flex-col overflow-hidden px-2">
+        <div className="shrink-0 text-center">
+          <Header title="Wordle" />
+        </div>
 
-        <Header title={"Wordle"} />
-        <GuessArea allRows={allRows} />
-        <MessageCenter message={message} />
-        <Keyboard
-          keyboard={keyboard}
-          demoNumKeys={demoNumKeys}
-          onClickCallback={keyboardKeyPressedCallBack}
-        />
-      </Box>
-    </Fragment>
+        {/* Board area grows to take remaining space */}
+        <div className="flex-1 min-h-0 flex items-center justify-center">
+          <GuessArea allRows={allRows} />
+        </div>
+
+        <div className="shrink-0">
+          <MessageCenter message={message} />
+        </div>
+
+        {/* Keyboard pinned at bottom */}
+        <div className="shrink-0 pb-[env(safe-area-inset-bottom)]">
+          <Keyboard
+            keyboard={keyboard}
+            demoNumKeys={demoNumKeys}
+            onClickCallback={keyboardKeyPressedCallBack}
+          />
+        </div>
+      </div>
+
   );
 }
 
