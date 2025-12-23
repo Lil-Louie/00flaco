@@ -180,7 +180,7 @@ function Wordle() {
         </div>
 
         {/* Keyboard pinned at bottom */}
-        <div className="shrink-0 pb-[env(safe-area-inset-bottom)]">
+        <div className="shrink-0 pb-[env(safe-area-inset-bottom)] m-0">
           <Keyboard
             keyboard={keyboard}
             demoNumKeys={demoNumKeys}
