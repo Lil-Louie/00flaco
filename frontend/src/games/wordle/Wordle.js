@@ -187,6 +187,8 @@ function Wordle() {
             onClickCallback={keyboardKeyPressedCallBack}
           />
         </div>
+        <div className="h-10 bg-red-500"></div>
+
       </div>
 
   );
