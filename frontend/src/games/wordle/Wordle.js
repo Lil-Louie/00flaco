@@ -180,15 +180,13 @@ function Wordle() {
         </div>
 
         {/* Keyboard pinned at bottom */}
-        <div className="mt-auto shrink-0 border border-red-500 pb-[env(safe-area-inset-bottom)] ">
+        <div className="mt-auto shrink-0 pb-[env(safe-area-inset-bottom)]">
           <Keyboard
             keyboard={keyboard}
             demoNumKeys={demoNumKeys}
             onClickCallback={keyboardKeyPressedCallBack}
-          />
+        />
         </div>
-        <div className="h-10 bg-red-500"></div>
-
       </div>
 
   );
