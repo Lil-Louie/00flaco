@@ -170,10 +170,6 @@ function Wordle() {
 
   return (
       <div className="mx-auto w-full max-w-[600px] h-[100dvh] flex flex-col overflow-hidden px-2">
-        <div className="shrink-0 text-center">
-          <Header title="Wordle" />
-        </div>
-
         {/* Board area grows to take remaining space */}
         <div className="flex-1 min-h-0 flex items-center justify-center">
           <GuessArea allRows={allRows} />
