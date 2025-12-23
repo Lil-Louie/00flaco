@@ -19,7 +19,7 @@ function Snake() {
   const [board, setBoard] = useState(() => initBoard(sizes.rows, sizes.columns));
   const touchStart = useRef({ x: 0, y: 0 });
   const touchLocked = useRef(false);
-  const SWIPE_MIN = 18; // px threshold (tweak)
+  const SWIPE_MIN = 10; // px threshold (tweak)
 
   const GameStatus = {
     READY: 'ready',
@@ -337,6 +337,8 @@ function addToFreePool( temp, cell) {
 
             // IMPORTANT for iOS Safari: allow preventDefault() on touchmove
             touchAction: "none",
+            WebkitUserSelect: "none",
+            userSelect: "none",
           }}
         >
           <GameBoard board={board} freePool={freePool} snake={snake} />
