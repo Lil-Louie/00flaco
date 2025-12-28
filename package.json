@@ -12,6 +12,7 @@
   "type": "commonjs",
   "dependencies": {
     "@koa/cors": "^5.0.0",
+    "@vercel/analytics": "^1.6.1",
     "koa": "^3.1.1",
     "koa-bodyparser": "^4.4.1",
     "koa-router": "^14.0.0"
