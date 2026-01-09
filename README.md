@@ -2,37 +2,48 @@
 
 Personal website repository for **00Flacco.com**.
 
-This project contains a React frontend and a backend service, organized in a single monorepo. 
-The backend is not implemented at this moement since it is not needed. 
+This project contains a React frontend and a backend service, organized in a single monorepo.  
+The backend is not implemented at the moment, as it is not currently needed.
 
 ---
 
-##Description
+## Description
+
 Welcome to my portfolio website. This site is designed to showcase my work as a software engineer, with a focus on front-end development and practical engineering skills.
+
 The site features several projects, including:
-Tevent
-GameUp
-Solano Solar Cleaning
-In addition, I’ve built two games — Wordle and Snake — to demonstrate deeper problem-solving, performance awareness, and data-structure-driven design.
+- **Tevent**
+- **GameUp**
+- **Solano Solar Cleaning**
+
+In addition, I’ve built two games — **Wordle** and **Snake** — to demonstrate deeper problem-solving, performance awareness, and data-structure-driven design.
+
 Both games will eventually be published as standalone GitHub repositories once final cleanup and documentation are complete.
 
 ---
 
-##Snake
-The Snake game was built using React, JavaScript, Tailwind CSS, and MUI.
-The core goal of this project was to implement Snake using a preallocated free-pool data structure, allowing for:
-O(1) segment updates (movement, growth, and reuse)
-Constant-time memory recycling
-Zero runtime memory allocation during gameplay
+## Snake
+
+The Snake game was built using **React**, **JavaScript**, **Tailwind CSS**, and **MUI**.
+
+The core goal of this project was to implement Snake using a **preallocated free-pool data structure**, allowing for:
+
+- **O(1) segment updates** (movement, growth, and reuse)
+- **Constant-time memory recycling**
+- **Zero runtime memory allocation during gameplay**
+
 By reusing preallocated snake segments rather than allocating new ones, the game achieves predictable performance and smooth updates regardless of snake length.
+
 This project emphasizes performance-conscious design, data structure selection, and real-world application of Big-O analysis.
 
 ---
 
-##Wordle
+## Wordle
+
 The Wordle game is a front-end focused implementation designed to showcase state management, UI feedback, and clean component architecture in React.
 
 ---
+
 
 ## Project Structure
 
