@@ -37,7 +37,6 @@ This project contains a React frontend and a backend service, organized in a sin
 
 ### Backend
 - Node.js
-- Express (if applicable)
 
 ---
 
@@ -102,4 +101,4 @@ npm run build
 
 ## License
 
-Personal project. All rights reserved.
+Flacco. All rights reserved.
