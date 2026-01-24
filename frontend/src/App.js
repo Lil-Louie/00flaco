@@ -1,4 +1,3 @@
-import { Analytics } from "@vercel/analytics/react"
 import Layout from './components/Layout';
 import Home from './pages/Home';
 import Games from './pages/Games';
@@ -31,7 +30,6 @@ function App() {
           }
         />
       </Routes>
-      <Analytics />
     </Layout>
   );
 }

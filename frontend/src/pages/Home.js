@@ -36,13 +36,12 @@ function Home() {
             </h1>
 
             <h2 className="mt-2 font-bold text-xl text-slate-100">
-              Software Engineer <span className="text-slate-400">| Front-End Focus</span>
+              Software Engineer <span className="text-slate-400">| Security Engineer</span>
             </h2>
 
 
             <p className="text-gray-300 text-base sm:text-lg leading-relaxed max-w-sm lg:max-w-md">
-              I create things, learn constantly, and share the process here.
-            </p>
+            Pure Mathematics and Computer Science graduate pursuing software and security engineering roles.            </p>
           </div>
 
           {/* In-page nav (only on lg+) */}
@@ -125,35 +124,35 @@ function Home() {
           About
         </h3>
         <div className="max-w-prose space-y-5 text-slate-300 leading-relaxed">
-          <p>
-            I’m a developer passionate about creating simple, elegant user interfaces
-            that prioritize performance and usability. I enjoy the craft of combining
-            beauty and clarity with resilience and robustness. As a developer, these
-            are the values I live by and strive to embed into every project.
+          <p>During my undergraduate studies, I developed a strong understanding of
+          C and C++ through hands on systems projects. These include building a C
+          interpreter, implementing a Unix-style Bash shell, and performing binary
+          exploitation on C executables in controlled, educational environments,
+          with exploit payloads written in Python. Through this work, I gained
+          practical experience with program execution, memory behavior, and
+          low-level vulnerabilities, and developed a security mindset grounded
+          in understanding why bugs and exploits work.
+          </p>
+
+          <p>In addition to systems and security work, I have experience building
+          full-stack applications using TypeScript, React, Node.js, Tailwind,
+          and PostgreSQL. During a semester-long, team-based project, we designed 
+          and built a full-stack application for managing and promoting local events, 
+          helping users discover activities in their area. I contributed across both 
+          the frontend and backend, with a primary focus on backend development—designing 
+          and implementing API routes, handling database queries, integrating services with 
+          the frontend, and ensuring the application was reliable, well-tested, and easy to maintain.
+          </p>
+
+          <p>Pure mathematics taught me to approach problem-solving differently than applied 
+          or computational math. Through proof-based coursework, I learned how to articulate 
+          ideas clearly and build rigorous, logically sound arguments to prove theorems. This 
+          experience shaped how I reason about correctness, edge cases, and assumptions, with 
+          skills that carry directly into software and security engineering.
           </p>
 
           <p>
-            I am a recent graduate with a double major in pure mathematics and computer
-            science, based in Northern California, and I’m pursuing a career as a
-            software engineer with a front-end focus. Over the past year, I’ve built
-            many front-end projects both independently and collaboratively. My proudest
-            work is my personal website, and my most professional accomplishment is a
-            business website I created for a small company I worked with.
-          </p>
-
-          <p>
-            During my undergraduate studies, I worked on several full-stack projects
-            with teams that used agile-based workflows to define measurable goals and
-            maintain productivity. I also took on the responsibility of building a
-            business website for a small company, which successfully gained traction
-            after launch.
-          </p>
-
-          <p>
-            In my spare time, I self-study pure mathematics, especially modern algebra,
-            and explore topics in security and software exploits. My life isn’t
-            completely consumed by computers, though; I spend a lot of time exercising,
-            traveling, and enjoying quality time with my partner.
+          Open to connecting and discussing projects, or opportunities (:
           </p>
         </div>
       </section>
@@ -190,23 +189,19 @@ function Home() {
           <h2 className="text-3xl font-bold text-slate-100">Games</h2>
 
           <div className="space-y-10">
-            <Link to="/games/snake" className="block">
-              <ProjectCard
-                title="Snake"
-                description="A classic Snake game built with React featuring a custom game loop, constant-time (O(1)) movement and collision checks, and responsive keyboard controls."
-                link="/games/snake"
-                tech={["React", "Game Loop", "MUI"]}
-              />
-            </Link>
+            <ProjectCard
+              title="Snake"
+              description="A classic Snake game built with React featuring a custom game loop, constant-time (O(1)) movement and collision checks, and responsive keyboard controls."
+              link="/games/snake"
+              tech={["React", "Game Loop", "MUI"]}
+            />
 
-            <Link to="/games/wordle" className="block">
-              <ProjectCard
-                title="Wordle"
-                description="A Wordle-inspired word guessing game featuring deterministic game logic, structured state management, and a polished, responsive user interface."
-                link="/games/wordle"
-                tech={["React", "State Mgmt", "UX"]}
-              />
-            </Link>
+            <ProjectCard
+              title="Wordle"
+              description="A Wordle-inspired word guessing game featuring deterministic game logic, structured state management, and a polished, responsive user interface."
+              link="/games/wordle"
+              tech={["React", "State Mgmt", "UX"]}
+            />
           </div>
         </section>
         <div className=""/>
