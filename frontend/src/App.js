@@ -1,4 +1,3 @@
-import { Analytics } from "@vercel/analytics/react"
 import Layout from './components/Layout';
 import Home from './pages/Home';
 import Games from './pages/Games';
@@ -8,6 +7,7 @@ import { Routes, Route } from 'react-router-dom';
 
 function App() {
   return (
+    <>
     <Layout>
       <Routes>
         <Route path="/" element={<Home />} />
@@ -31,8 +31,8 @@ function App() {
           }
         />
       </Routes>
-      <Analytics />
     </Layout>
+    </>
   );
 }
 
