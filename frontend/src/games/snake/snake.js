@@ -238,7 +238,7 @@ function addToFreePool( temp, cell) {
   
     rafId = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(rafId);
-  }, [status, score]); // score affects speed
+  }, [status, score, step()]); // score affects speed
 
   
   const cloneRow = (board, r) => board[r].slice();

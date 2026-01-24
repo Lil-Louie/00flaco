@@ -83,7 +83,7 @@ function Wordle() {
     if (message === NOT_IN_LIST_MSG) {
       setMessage("");
     }
-  }, [activeRowIdx]); // runs whenever user types or deletes
+  }, [activeRowIdx, message]); // runs whenever user types or deletes
   
 
   if (!loaded) return <div style={{ color: "white" }}>Loading…</div>;
