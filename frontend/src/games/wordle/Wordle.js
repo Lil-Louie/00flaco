@@ -1,5 +1,4 @@
 import { Fragment, useEffect, useState } from "react";
-import Box from "@mui/material/Box";
 
 import GuessArea from "./pages/GuessArea";
 import Header from "./pages/Header";
@@ -9,8 +8,6 @@ import MessageCenter from "./pages/MessageCenter";
 import dimensions from "./utils/dimensions";
 import boxStyles from "./utils/boxesAndTheirAttributes";
 import { useWordLists } from "./utils/useWordLists";
-
-const { keyboardBoxSizes, keyboardFunctionSizes } = dimensions;
 
 function Wordle() {
   const { answer, isValidGuess, loaded, error } = useWordLists();
