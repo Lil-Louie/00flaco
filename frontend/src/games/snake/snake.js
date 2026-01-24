@@ -1,4 +1,4 @@
-import { Fragment, useRef, useState, useEffect } from 'react';
+import { Fragment, useRef, useState, useEffect, useCallback } from 'react';
 import Header from './pages/Header';
 import GameBoard from './pages/GameBoard';
 import PlayButton from './pages/PlayButton';
@@ -16,17 +16,11 @@ function Snake() {
   const freePool = useRef([]); // array of (r,c)
   const dir = useRef({ dr: 0, dc: 1 }); // current unit vector
   const lastMoveAt = useRef(performance.now());
+  const stepRef = useRef(null); 
   const [board, setBoard] = useState(() => initBoard(sizes.rows, sizes.columns));
   const touchStart = useRef({ x: 0, y: 0 });
   const touchLocked = useRef(false);
   const SWIPE_MIN = 10; // px threshold (tweak)
-
-  const GameStatus = {
-    READY: 'ready',
-    RUNNING: 'running',
-    PAUSED: 'paused',
-    GAMEOVER: 'gameover',
-  };
 
   //Makes a new board with index 0 to board.length
   function initBoard(rows, cols) {
@@ -221,6 +215,10 @@ function addToFreePool( temp, cell) {
     return () => window.removeEventListener("keydown", handler);
   }, [onKeyDown]);
   
+  useEffect(() => {
+    stepRef.current = step;
+  }, [step]);
+
 
   useEffect(() => {
     if (status !== "running") return;
@@ -230,7 +228,8 @@ function addToFreePool( temp, cell) {
     const loop = (t) => {
       const tickMs = computeTickLength(score);
       if (t - lastMoveAt.current >= tickMs) {
-        step();
+        // call latest step implementation
+        if (stepRef.current) stepRef.current();
         lastMoveAt.current = t;
       }
       rafId = requestAnimationFrame(loop);
@@ -238,7 +237,7 @@ function addToFreePool( temp, cell) {
   
     rafId = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(rafId);
-  }, [status, score]); 
+  }, [status, score]);
 
   
   const cloneRow = (board, r) => board[r].slice();
