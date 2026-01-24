@@ -1,7 +1,6 @@
-import { Fragment, useEffect, useState } from "react";
-
+import React from "react";
+import { useEffect, useState } from "react";
 import GuessArea from "./pages/GuessArea";
-import Header from "./pages/Header";
 import Keyboard from "./pages/Keyboard";
 import MessageCenter from "./pages/MessageCenter";
 

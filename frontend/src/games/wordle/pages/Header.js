@@ -1,7 +1,4 @@
-import Box from "@mui/material/Box";
 import {Typography} from "@mui/material";
-
-import dimensions from "../utils/dimensions";
 
 const Header = props => {
 

@@ -1,4 +1,4 @@
-import { green, grey, orange, yellow, red } from '@mui/material/colors';
+import { green, grey, yellow, red } from '@mui/material/colors';
 
 const boxStyleVariants = {
   freeArea: {
