@@ -4,7 +4,6 @@ import GameBoard from './pages/GameBoard';
 import PlayButton from './pages/PlayButton';
 import { sizes } from './utils/dimensions';
 import { Box } from '@mui/material';
-import { useCallback } from "react";
 
 
 function Snake() {
