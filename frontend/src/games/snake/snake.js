@@ -21,13 +21,6 @@ function Snake() {
   const touchLocked = useRef(false);
   const SWIPE_MIN = 10; // px threshold (tweak)
 
-  const GameStatus = {
-    READY: 'ready',
-    RUNNING: 'running',
-    PAUSED: 'paused',
-    GAMEOVER: 'gameover',
-  };
-
   //Makes a new board with index 0 to board.length
   function initBoard(rows, cols) {
     const newBoard = [];
@@ -238,7 +231,7 @@ function addToFreePool( temp, cell) {
   
     rafId = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(rafId);
-  }, [status, score]); // score affects speed
+  }, [status, score, step]); // score affects speed
 
   
   const cloneRow = (board, r) => board[r].slice();
