@@ -1,10 +1,9 @@
-import { Fragment, useRef, useState, useEffect } from 'react';
+import { useCallback, Fragment, useRef, useState, useEffect } from 'react';
 import Header from './pages/Header';
 import GameBoard from './pages/GameBoard';
 import PlayButton from './pages/PlayButton';
 import { sizes } from './utils/dimensions';
 import { Box } from '@mui/material';
-import { useCallback } from "react";
 
 
 function Snake() {
@@ -53,40 +52,36 @@ function Snake() {
     }
   };
 
-  function removeFromFreePool(temp, i, value) {
-    const last = freePool.current.length - 1
+  const removeFromFreePool = useCallback((temp, i, value) => {
+    const last = freePool.current.length - 1;
     if (i !== last) {
-        const removeCell = freePool.current[i]
-        const swappedCell = freePool.current[last]
-        freePool.current[last] = freePool.current[i]
-        freePool.current[i] = swappedCell
-        temp[swappedCell.row][swappedCell.col] = i
-        temp[removeCell.row][removeCell.col] = value
+      const removeCell = freePool.current[i];
+      const swappedCell = freePool.current[last];
+      // place swapped cell into removed slot
+      freePool.current[i] = swappedCell;
+      temp[swappedCell.row][swappedCell.col] = i;
+      temp[removeCell.row][removeCell.col] = value;
     }
-    freePool.current.pop()
-    return temp
-}
-
-function addToFreePool( temp, cell) {
-  freePool.current.push(cell)
-  temp[cell.row][cell.col] = freePool.current.length - 1
-  return temp
-}
-
-  function placeFood(temp) {
-    if (freePool.current.length === 0) return temp
-    const idx = Math.floor(Math.random() * freePool.current.length)
-    const newFoodCell = freePool.current[idx]
-    const fp_idx_of_food = temp[newFoodCell.row][newFoodCell.col]
-    temp = removeFromFreePool(temp, fp_idx_of_food, -3)
+    freePool.current.pop();
     return temp;
-  }
-
-  function handleFood(temp) {
-    setScore(prev => prev + 1);
-    temp = placeFood(temp);
+  }, []);
+  
+  // addToFreePool used during runtime and setup
+  const addToFreePool = useCallback((temp, cell) => {
+    freePool.current.push(cell);
+    temp[cell.row][cell.col] = freePool.current.length - 1;
     return temp;
-  }
+  }, []);
+  
+  // placeFood uses removeFromFreePool (which is stable)
+  const placeFood = useCallback((temp) => {
+    if (freePool.current.length === 0) return temp;
+    const idx = Math.floor(Math.random() * freePool.current.length);
+    const newFoodCell = freePool.current[idx];
+    const fp_idx_of_food = temp[newFoodCell.row][newFoodCell.col];
+    return removeFromFreePool(temp, fp_idx_of_food, -3);
+  }, [removeFromFreePool]);
+  
 
   function setSnakeWithFood(temp) {
 
@@ -213,12 +208,55 @@ function addToFreePool( temp, cell) {
     window.addEventListener("keydown", handler, { passive: false });
     return () => window.removeEventListener("keydown", handler);
   }, [onKeyDown]);
+
   
 
   useEffect(() => {
     if (status !== "running") return;
   
     let rafId;
+  
+    const step = () => {
+      setBoard((prevBoard) => {
+        const oldHead = snake.current[head.current];
+        if (!oldHead) return prevBoard;
+  
+        const newHeadCell = {
+          row: oldHead.row + dir.current.dr,
+          col: oldHead.col + dir.current.dc,
+        };
+  
+        const newHeadValue = prevBoard[newHeadCell.row]?.[newHeadCell.col];
+  
+        if (
+          newHeadValue === undefined ||
+          newHeadValue === -1 ||
+          newHeadValue === -2
+        ) {
+          setStatus("gameover");
+          return prevBoard;
+        }
+  
+        // shallow-copy rows
+        let temp = prevBoard.map((r) => r.slice());
+  
+        // advance head
+        head.current = (head.current + 1) % snake.current.length;
+        snake.current[head.current] = newHeadCell;
+  
+        if (newHeadValue === -3) {
+          setScore((s) => s + 1);
+          // use top-level stable placeFood
+          return placeFood(temp);
+        } else {
+          const tailCell = snake.current[tail.current];
+          temp = removeFromFreePool(temp, newHeadValue, -2);
+          temp = addToFreePool(temp, tailCell);
+          tail.current = (tail.current + 1) % snake.current.length;
+          return temp;
+        }
+      });
+    };
   
     const loop = (t) => {
       const tickMs = computeTickLength(score);
@@ -231,61 +269,14 @@ function addToFreePool( temp, cell) {
   
     rafId = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(rafId);
-  }, [status, score, step]); // score affects speed
+  }, [status, score, placeFood, removeFromFreePool, addToFreePool]);
+  
 
   
-  const cloneRow = (board, r) => board[r].slice();
 
   
-  function step() {
-    setBoard((prevBoard) => {
-      const oldHead = snake.current[head.current];
-      if (!oldHead) return prevBoard;
-  
-      const newHeadCell = {
-        row: oldHead.row + dir.current.dr,
-        col: oldHead.col + dir.current.dc,
-      };
-  
-      const newHeadValue = prevBoard[newHeadCell.row]?.[newHeadCell.col];
-  
-      // game over
-      if (newHeadValue === undefined || newHeadValue === -1 || newHeadValue === -2) {
-        setStatus("gameover");
-        return prevBoard;
-      }
-  
-      // shallow copy outer array
-      let temp = prevBoard.slice();
-  
-      // clone the new head row (we will mutate it via removeFromFreePool)
-      temp[newHeadCell.row] = cloneRow(prevBoard, newHeadCell.row);
-  
-      // advance head buffer
-      head.current = (head.current + 1) % snake.current.length;
-      snake.current[head.current] = newHeadCell;
-  
-      if (newHeadValue === -3) {
-        // eating: easiest safe path is full copy only on eat
-        // (because placeFood can touch any row)
-        temp = prevBoard.map((r) => r.slice());
-        temp = handleFood(temp);
-        return temp;
-      } else {
-        // we will also mutate the tail cell row (addToFreePool)
-        const tailCell = snake.current[tail.current];
-        temp[tailCell.row] = temp[tailCell.row] ?? cloneRow(prevBoard, tailCell.row);
-  
-        // mutate temp using your existing helpers
-        temp = removeFromFreePool(temp, newHeadValue, -2);
-        temp = addToFreePool(temp, tailCell);
-  
-        tail.current = (tail.current + 1) % snake.current.length;
-        return temp;
-      }
-    });
-  }
-  
+
+
   
 
   return (
