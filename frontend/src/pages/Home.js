@@ -134,8 +134,8 @@ function Home() {
           </p>
 
           <p>In addition to systems and security work, I have experience building
-          full-stack applications using TypeScript, React, Node.js, Tailwind,
-          and PostgreSQL. During a semester-long, team-based project, we designed 
+          full-stack applications using JavaScript, React, Node.js, Tailwind,
+          and MongoDB. During a semester-long, team-based project, we designed 
           and built a full-stack application for managing and promoting local events, 
           helping users discover activities in their area. I contributed across both 
           the frontend and backend, with a primary focus on backend development—designing 
